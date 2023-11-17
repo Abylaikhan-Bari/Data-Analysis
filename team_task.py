@@ -49,7 +49,7 @@ plt.show()
 sns.pairplot(df[['EngagementSurvey', 'EmpSatisfaction', 'PerformanceScore']])
 plt.show()
 
-# 4. Optional: Hypothesis Testing
+# 4. Hypothesis Testing
 # "Higher engagement scores lead to higher employee satisfaction."
 plt.figure(figsize=(8, 6))
 sns.scatterplot(x='EngagementSurvey', y='EmpSatisfaction', data=df)
@@ -69,7 +69,7 @@ y_pred = model.predict(X_test)
 print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 print("R-squared:", r2_score(y_test, y_pred))
 
-# Optional: Plotting predictions
+# Plotting predictions
 plt.scatter(X_test['EngagementSurvey'], y_test, color='black', label='Actual Salary')
 plt.scatter(X_test['EngagementSurvey'], y_pred, color='blue', label='Predicted Salary')
 plt.xlabel('Engagement Survey')
