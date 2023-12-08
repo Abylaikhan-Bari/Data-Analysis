@@ -59,12 +59,10 @@ sns.scatterplot(x='EngagementSurvey', y='EmpSatisfaction', data=df)
 plt.title('Engagement Survey vs Employee Satisfaction')
 plt.show()
 
-# ... (previous code remains unchanged)
-
 # 5. Regression Analysis
-# Predicting Salary based on EngagementSurvey and EmpSatisfaction
-X = df[['EngagementSurvey', 'EmpSatisfaction']]
-y = df['Salary']
+# Predicting Salary based on all other features
+X = df_encoded.drop('Salary', axis=1)  # Drop the target variable to get the features
+y = df_encoded['Salary']
 
 # Splitting the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -73,24 +71,14 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 model = LinearRegression()
 model.fit(X_train, y_train)
 
-# Making predictions
-y_pred = model.predict(X_test)
+# Making predictions on the entire dataset for correlation matrix
+df_encoded['Predicted Salary'] = model.predict(df_encoded.drop('Salary', axis=1))
 
-# Evaluating the model
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
-print("Mean Squared Error:", mse)
-print("R-squared:", r2)
-
-# Create a DataFrame for the actual and predicted values
-results_df = pd.DataFrame({'Actual Salary': y_test, 'Predicted Salary': y_pred})
 # Calculate the correlation matrix including both actual and predicted values
-correlation_matrix = results_df.corr()
+correlation_matrix = df_encoded.corr()
 
 # Plotting the heatmap for the correlation matrix
-plt.figure(figsize=(8, 6))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0)
-plt.title('Heatmap of Actual vs Predicted Salary Correlation')
+plt.figure(figsize=(20, 18))  # Adjust the size of the heatmap to accommodate the larger number of variables
+sns.heatmap(correlation_matrix, annot=False, cmap='coolwarm', center=0)
+plt.title('Heatmap of Correlation Matrix including Predicted Salary')
 plt.show()
-
-

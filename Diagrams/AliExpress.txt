@@ -1,0 +1,131 @@
+title AliExpress
+
+actor User
+note right of User: The end customer who uses the AliExpress app for shopping.
+participant "App Interface"
+note right of "App Interface": The user interface of the AliExpress app.
+participant "Authentication Service"
+note right of "Authentication Service": Handles user authentication and login.
+participant "Product Search Service"
+note right of "Product Search Service": Facilitates product searching within the app.
+participant "Product Details Service"
+note right of "Product Details Service": Provides detailed information about products.
+participant "Shopping Cart Service"
+note right of "Shopping Cart Service": Manages the user's shopping cart.
+participant "Payment Gateway"
+note right of "Payment Gateway": Processes payments and transactions.
+participant "Order Management Service"
+note right of "Order Management Service": Manages the lifecycle of user orders.
+participant "Notification System"
+note right of "Notification System": Sends notifications to the user.
+actor Seller
+note right of Seller: The vendor or business selling products on AliExpress.
+participant "Shipping Service"
+note right of "Shipping Service": Manages delivery and shipping of products.
+participant "Feedback System"
+note right of "Feedback System": Collects and processes user feedback.
+participant "Inventory Management"
+note right of "Inventory Management": Monitors and manages product inventory.
+participant "Customer Support"
+note right of "Customer Support": Provides user support and assistance.
+participant "Analytics System"
+note right of "Analytics System": Analyzes data for business insights.
+
+User->"App Interface": Opens App
+activate "App Interface"
+
+"App Interface"->"Authentication Service": Request User Login
+activate "Authentication Service"
+"Authentication Service"-->>"App Interface": Prompt for Credentials
+"App Interface"-->>User: Display Login Screen
+User->"App Interface": Enter Credentials
+"Authentication Service"->"App Interface": Verify Credentials
+"Authentication Service"->"App Interface": Authentication Failed
+"App Interface"->"Authentication Service": Request Credential Retry
+"Authentication Service"-->>"App Interface": Prompt for Credentials (Retry)
+"App Interface"-->>User: Display Login Screen (Retry)
+User->"App Interface": Enter Credentials (Retry)
+"Authentication Service"->"App Interface": Authentication Success
+deactivate "Authentication Service"
+
+User->"App Interface": Search for "Phone"
+"App Interface"->"Product Search Service": Query "Phone"
+activate "Product Search Service"
+"Product Search Service"-->>"App Interface": Return Search Results
+"App Interface"-->>User: Display Search Results
+deactivate "Product Search Service"
+
+User->"App Interface": Select "Phone"
+"App Interface"->"Product Details Service": Request Details for "Phone"
+activate "Product Details Service"
+"Product Details Service"-->>"App Interface": Show "Phone" Details
+"App Interface"-->>User: Display "Phone" Details
+deactivate "Product Details Service"
+
+User->"App Interface": Add "Phone" to Cart
+"App Interface"->"Shopping Cart Service": Update Cart
+activate "Shopping Cart Service"
+"Shopping Cart Service"->"Inventory Management": Verify Stock for "Phone"
+activate "Inventory Management"
+"Inventory Management"-->>"Shopping Cart Service": Stock Confirmed
+"Shopping Cart Service"-->>"App Interface": Confirm Addition to Cart
+"App Interface"-->>User: Confirm Addition to Cart
+deactivate "Inventory Management"
+deactivate "Shopping Cart Service"
+
+User->"App Interface": Proceed to Checkout
+"App Interface"->"Order Management Service": Initiate Order
+activate "Order Management Service"
+"Order Management Service"-->>"App Interface": Request Payment
+"App Interface"->"Payment Gateway": Forward Payment Request
+activate "Payment Gateway"
+"Payment Gateway"-->>"App Interface": Display Payment Options
+"App Interface"-->>User: Show Payment Options
+User->"App Interface": Complete Payment
+"Payment Gateway"-->>"App Interface": Confirm Payment
+deactivate "Payment Gateway"
+"Order Management Service"-->>"App Interface": Order Confirmation
+"App Interface"->"Analytics System": Log Order Data
+activate "Analytics System"
+"Analytics System"-->>"App Interface": Data Logged
+deactivate "Analytics System"
+"App Interface"-->>User: Display Order Confirmation
+deactivate "Order Management Service"
+
+"App Interface"->Seller: Place Order and Request Shipping
+activate Seller
+Seller->"Shipping Service": Arrange Shipping for "Phone"
+activate "Shipping Service"
+"Shipping Service"-->>"App Interface": Confirm Shipping Arrangement
+"App Interface"->"Notification System": Send Shipping Notification
+activate "Notification System"
+"Notification System"-->>User: Shipping Confirmation and Tracking
+deactivate "Notification System"
+deactivate "Shipping Service"
+deactivate Seller
+
+User->"App Interface": Access Customer Support
+"App Interface"->"Customer Support": Connect to Support
+activate "Customer Support"
+"Customer Support"-->>User: Support Interaction
+deactivate "Customer Support"
+
+User->"App Interface": Submit Feedback
+"App Interface"->"Feedback System": Record User Feedback
+activate "Feedback System"
+"Feedback System"-->>"App Interface": Notify Seller of Feedback
+"App Interface"-->>Seller: Display Feedback Notification
+activate Seller
+Seller-->>"App Interface": Acknowledge Feedback
+"App Interface"->"Analytics System": Log Feedback Data
+activate "Analytics System"
+"Analytics System"-->>"App Interface": Data Logged
+deactivate "Analytics System"
+"App Interface"-->>User: Feedback Acknowledged
+deactivate Seller
+deactivate "Feedback System"
+
+deactivate "App Interface"
+
+
+
